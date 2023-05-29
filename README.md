@@ -29,6 +29,7 @@ Then add under `config.json` within `"PackageConfig"`:
 ```
         "github.com/damdo/gokrazy-kiosk": {
             "CommandLineFlags": [
+                "--name", "gokrazy-kiosk",
                 "quay.io/damdo/gokrazy-kiosk-chromium:20230529135304",
                 "/usr/bin/chromium",
                 "--no-sandbox",
@@ -46,4 +47,4 @@ Then add under `config.json` within `"PackageConfig"`:
 ### what is left to do
 - [ ] full screen + resolution config need improvements
 - [ ] make keyboard work (hard to reliably detect due to gokrazy not having udev)
-- [ ] the mouse works but only if it's the only usb device plugged and only if it's there at boot (hard to reliably detect due to gokrazy not having udev)
+- [ ] the mouse works but only if it is passed down before the container image as `--device=/dev/input/eventXXXX:/dev/input/event4` it's the only usb device plugged and only if it's there at boot (hard to reliably detect due to gokrazy not having udev)
