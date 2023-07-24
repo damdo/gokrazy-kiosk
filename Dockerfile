@@ -2,7 +2,7 @@ FROM debian:11-slim
 
 RUN apt-get update -y && \
     DEBIAN_FRONTEND='noninteractive' apt-get install --no-install-recommends -y \
-    xorg xserver-xorg-input-evdev xserver-xorg-input-all chromium
+    xorg xserver-xorg-input-evdev xserver-xorg-input-all chromium wmctrl xdotool
 
 RUN printf "\
 Section \"ServerFlags\"\n\

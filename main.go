@@ -26,6 +26,7 @@ func main() {
 	defaultArgs := []string{
 		"-e", "TERM=rxvt-unicode",
 		"-e", "LANG=C.UTF-8",
+		"-e", "DISPLAY=:0",
 		"--tty",
 		"--pull", "missing",
 		"--device", "/dev/console",
