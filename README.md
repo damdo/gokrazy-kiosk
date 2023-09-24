@@ -45,6 +45,6 @@ Then add under `config.json` within `"PackageConfig"`:
 ```
 
 ### what is left to do
-- [ ] full screen + resolution config need improvements
+- [x] full screen + resolution config need improvements
 - [ ] make keyboard work (hard to reliably detect due to gokrazy not having udev)
 - [ ] the mouse works but only if it is passed down before the container image as `--device=/dev/input/eventXXXX:/dev/input/event4` it's the only usb device plugged and only if it's there at boot (hard to reliably detect due to gokrazy not having udev)
