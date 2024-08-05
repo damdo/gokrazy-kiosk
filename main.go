@@ -66,6 +66,10 @@ func run(cancel context.CancelFunc, errChan chan error, containerName string, ar
 
 	containerStoragePath := path.Join(rawContainerStoragePath)
 
+	if err := os.MkdirAll(containerStoragePath, os.ModePerm); err != nil {
+		logger.Printf("unable to create permanent container storage dir %q: %w", err)
+	}
+
 	if err := mountVar(containerStoragePath); err != nil {
 		logger.Fatal(err)
 	}
@@ -109,7 +113,7 @@ func cleanup(containerName string) {
 	}
 }
 
-// mountVar bind-mounts /perm/container-storage to /var if needed.
+// mountVar bind-mounts storagePath to /var if needed.
 // This could be handled by an fstab(5) feature in gokrazy in the future.
 func mountVar(storagePath string) error {
 	b, err := os.ReadFile("/proc/self/mountinfo")
@@ -128,12 +132,14 @@ func mountVar(storagePath string) error {
 	}
 	if _, err := os.Stat(storagePath); !os.IsNotExist(err) {
 		if err := syscall.Mount(storagePath, "/var", "", syscall.MS_BIND, ""); err != nil {
-			return fmt.Errorf("mounting %s to /var: %v", storagePath, err)
+			return fmt.Errorf("error mounting %s to /var: %v", storagePath, err)
 		}
+		logger.Printf("mounted /var to permanent storagePath %q", storagePath)
 	} else {
 		if err := syscall.Mount("tmpfs", "/var", "tmpfs", 0, ""); err != nil {
-			return fmt.Errorf("mounting tmpfs to /var: %v", err)
+			return fmt.Errorf("error mounting tmpfs to /var: %v", err)
 		}
+		logger.Print("mounted /var to temporary tmpfs")
 	}
 
 	return nil
@@ -172,7 +178,7 @@ func podman(ctx context.Context, args ...string) (*bytes.Buffer, error) {
 
 	podman := exec.CommandContext(ctx, "/usr/local/bin/podman", args...)
 	podman.Env = expandPath(os.Environ())
-	podman.Env = append(podman.Env, "TMPDIR=/tmp")
+	podman.Env = append(podman.Env, "TMPDIR="+path.Join(rawContainerStoragePath))
 	podman.Stdin = os.Stdin
 	podman.Stdout = os.Stdout
 	podman.Stderr = mw
