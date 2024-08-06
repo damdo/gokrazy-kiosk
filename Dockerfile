@@ -2,7 +2,7 @@ FROM debian:12-slim
 
 RUN apt-get update -y && \
     DEBIAN_FRONTEND='noninteractive' apt-get install --no-install-recommends -y \
-    xorg xserver-xorg-input-evdev xserver-xorg-input-all chromium wmctrl xdotool
+    xorg xserver-xorg-input-evdev xserver-xorg-input-all chromium wmctrl xdotool scrot python3 python3-pil python3-tz
 
 RUN printf "\
 Section \"ServerFlags\"\n\
@@ -26,6 +26,10 @@ Section \"InputDevice\"\n\
 EndSection\n\
 " > /etc/X11/xorg.conf.d/10-input.conf
 
+ADD chromium-refresher.py /usr/bin/chromium-refresher.py
+RUN chmod +x /usr/bin/chromium-refresher.py
+
 ADD entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
+
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]

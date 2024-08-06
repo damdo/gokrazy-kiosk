@@ -30,7 +30,7 @@ Then add under `config.json` within `"PackageConfig"`:
         "github.com/damdo/gokrazy-kiosk": {
             "CommandLineFlags": [
                 "--name", "gokrazy-kiosk",
-                "quay.io/damdo/gokrazy-kiosk-chromium:20230529135304",
+                "quay.io/damdo/gokrazy-kiosk-chromium:20240806144534",
                 "/usr/bin/chromium",
                 "--no-sandbox",
                 "--no-first-run",
